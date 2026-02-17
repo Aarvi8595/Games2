@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>For You ❤️</title>
+  <style>
+    body { font-family: system-ui, Arial; margin: 0; background: #0b0b10; color: #fff; }
+    .wrap { max-width: 720px; margin: 0 auto; padding: 28px 18px; }
+    .card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 18px; padding: 22px; box-shadow: 0 10px 30px rgba(0,0,0,0.35); }
+    h1 { font-size: 28px; margin: 0 0 10px; }
+    p { line-height: 1.55; margin: 8px 0 14px; opacity: 0.95; }
+    .btns { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+    button { border: 0; padding: 12px 14px; border-radius: 14px; cursor: pointer; font-weight: 650; }
+    .primary { background: #ff4d8d; color: #0b0b10; }
+    .ghost { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.25); }
+    .tiny { font-size: 12px; opacity: 0.8; margin-top: 10px; }
+    .tag { display:inline-block; padding:6px 10px; border-radius: 999px; background: rgba(255,255,255,0.08); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" id="app"></div>
+    <div class="tiny">Tip: edit the text to match your style + your memories.</div>
+  </div>
+
+  <script>
+    const pages = {
+      start: {
+        title: "Hey you ❤️",
+        text: "I made a tiny little story for you. Ready to play?",
+        actions: [
+          { label: "Yes 😄", to: "vibe", className: "primary" },
+          { label: "Tell me what this is", to: "tease", className: "ghost" }
+        ]
+      },
+      tease: {
+        title: "Okay okay 😌",
+        text: "You click a few things… and it ends with a surprise question from me.",
+        actions: [
+          { label: "I’m ready", to: "vibe", className: "primary" }
+        ]
+      },
+      vibe: {
+        title: "Pick a vibe for tonight",
+        text: "Choose one and don’t overthink it 😏",
+        actions: [
+          { label: "Cozy 🕯️", to: "cozy", className: "primary" },
+          { label: "Fancy ✨", to: "fancy", className: "ghost" },
+          { label: "Funny 😄", to: "funny", className: "ghost" }
+        ]
+      },
+      cozy: {
+        title: "Cozy mode 🕯️",
+        text: "Warm vibe. Soft smiles. And… I miss you a little extra today.",
+        actions: [
+          { label: "Aww 🥺", to: "menu", className: "primary" },
+          { label: "Continue →", to: "menu", className: "ghost" }
+        ]
+      },
+      fancy: {
+        title: "Fancy mode ✨",
+        text: "Okay ma’am. Full premium energy. You + me + a nice dinner vibe.",
+        actions: [
+          { label: "Proceed 😌", to: "menu", className: "primary" }
+        ]
+      },
+      funny: {
+        title: "Funny mode 😄",
+        text: "Serious question: if we had a cooking show, would you trust me near the stove?",
+        actions: [
+          { label: "No 😂", to: "menu", className: "ghost" },
+          { label: "Maybe…", to: "menu", className: "primary" }
+        ]
+      },
+      menu: {
+        title: "Choose the menu",
+        text: "What should our dinner be on video call?",
+        actions: [
+          { label: "Pizza 🍕", to: "ask", className: "primary" },
+          { label: "Biryani 🍛", to: "ask", className: "ghost" },
+          { label: "Sushi 🍣", to: "ask", className: "ghost" }
+        ]
+      },
+      ask: {
+        title: "One last thing…",
+        text: "Will you do a video call dinner with me? I’ll plan it nicely 😌❤️",
+        actions: [
+          { label: "Yes ❤️", to: "yes", className: "primary" },
+          { label: "Maybe 😄", to: "maybe", className: "ghost" }
+        ]
+      },
+      yes: {
+        title: "YAY ❤️",
+        text: "Okay, pick a time option and reply with A / B / C.",
+        extra: `<div class="tag">A) Tonight 8:30</div> <div class="tag">B) Tomorrow 7:30</div> <div class="tag">C) You choose 😌</div>`,
+        actions: [
+          { label: "Send you my choice →", to: "end", className: "primary" }
+        ]
+      },
+      maybe: {
+        title: "Deal 😄",
+        text: "Okay negotiation queen. Pick one:",
+        extra: `<div class="tag">1) 30 mins quick dinner</div> <div class="tag">2) Full dinner + movie after</div> <div class="tag">3) Weekend special</div>`,
+        actions: [
+          { label: "I’ll tell you ❤️", to: "end", className: "primary" }
+        ]
+      },
+      end: {
+        title: "Now message me 😌",
+        text: "Just send me your choice. I’m happy either way — I just want time with you.",
+        actions: [
+          { label: "Restart", to: "start", className: "ghost" }
+        ]
+      }
+    };
+
+    function render(key) {
+      const page = pages[key];
+      const app = document.getElementById("app");
+      app.innerHTML = `
+        <h1>${page.title}</h1>
+        <p>${page.text}</p>
+        ${page.extra ? `<div style="margin:10px 0 14px; display:flex; gap:8px; flex-wrap:wrap;">${page.extra}</div>` : ""}
+        <div class="btns">
+          ${page.actions.map(a => `<button class="${a.className}" data-to="${a.to}">${a.label}</button>`).join("")}
+        </div>
+      `;
+      app.querySelectorAll("button").forEach(btn => {
+        btn.addEventListener("click", () => render(btn.dataset.to));
+      });
+    }
+
+    render("start");
+  </script>
+</body>
+</html>
